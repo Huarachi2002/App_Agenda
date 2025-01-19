@@ -2,7 +2,7 @@ import '../../domain/entities/user.dart';
 
 abstract class UserRepository {
   /// Autentica al usuario con [email] y [password].
-  Future<User> signIn({
+  Future<UserEntity> signIn({
     required String email,
     required String password,
   });
@@ -11,7 +11,7 @@ abstract class UserRepository {
   Future<void> signOut();
 
   /// Crea un usuario (registro).
-  Future<User> createUser({
+  Future<UserEntity> createUser({
     required String name,
     required String email,
     required String password,
@@ -19,5 +19,5 @@ abstract class UserRepository {
   });
 
   /// Obtiene al usuario actualmente autenticado (si existe sesión).
-  Future<User?> getCurrentUser();
+  Future<UserEntity?> getCurrentUser();
 }

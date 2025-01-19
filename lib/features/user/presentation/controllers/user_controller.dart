@@ -12,11 +12,11 @@ final userRepositoryProvider = Provider<UserRepository>((ref) {
 
 /// Controller con estado AsyncValue<UserEntity?> 
 /// para representar el usuario actual (o null si no hay).
-class UserController extends AsyncNotifier<User?> {
+class UserController extends AsyncNotifier<UserEntity?> {
   late final UserRepository _repository;
 
   @override
-  FutureOr<User?> build() async {
+  FutureOr<UserEntity?> build() async {
     // Este método build se llama al inicializar el controlador
     // y retorna el user actual (o null). 
     // Se setea el estado en loading y luego en data/error automáticamente.
@@ -72,6 +72,6 @@ class UserController extends AsyncNotifier<User?> {
 
 /// Provider que expone la instancia de UserController
 final userControllerProvider =
-    AsyncNotifierProvider<UserController, User?>(() {
+    AsyncNotifierProvider<UserController, UserEntity?>(() {
   return UserController();
 });

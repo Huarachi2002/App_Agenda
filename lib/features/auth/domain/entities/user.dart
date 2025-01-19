@@ -1,10 +1,10 @@
-class User {
+class UserEntity {
   final String id;
   final String name;
   final String email;
   final UserRole role; // Enum con {student, teacher, parent, admin}
 
-  const User({
+  const UserEntity({
     required this.id,
     required this.name,
     required this.email,

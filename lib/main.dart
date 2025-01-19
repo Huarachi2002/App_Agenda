@@ -1,4 +1,5 @@
-import 'package:app_task/features/auth/data/datasources/user_remote_datasource.dart';
+import 'package:app_task/core/router/app_router.dart';
+import 'package:app_task/features/user/data/datasources/user_remote_datasource.dart';
 import 'package:app_task/features/user/data/repositories_impl/user_repository_impl.dart';
 import 'package:app_task/features/user/presentation/controllers/user_controller.dart';
 import 'package:app_task/features/user/presentation/pages/home_page.dart';
@@ -19,18 +20,21 @@ void main() {
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends ConsumerWidget  {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final goRouter = ref.watch(goRouterProvider);
+    return MaterialApp.router(
       title: 'Agenda Escolar',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      routeInformationParser: goRouter.routeInformationParser,
+      routerDelegate: goRouter.routerDelegate,
+      routeInformationProvider: goRouter.routeInformationProvider,
     );
   }
 }

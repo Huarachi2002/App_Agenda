@@ -1,6 +1,6 @@
 import 'package:app_task/features/auth/data/repositories/user_repository.dart';
 import '../../../auth/domain/entities/user.dart';
-import '../../../auth/data/datasources/user_remote_datasource.dart';
+import '../datasources/user_remote_datasource.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final UserRemoteDataSource remoteDataSource;
@@ -8,7 +8,7 @@ class UserRepositoryImpl implements UserRepository {
   UserRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<User> signIn({
+  Future<UserEntity> signIn({
     required String email,
     required String password,
   }) async {
@@ -22,7 +22,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User> createUser({
+  Future<UserEntity> createUser({
     required String name,
     required String email,
     required String password,
@@ -38,7 +38,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User?> getCurrentUser() async {
+  Future<UserEntity?> getCurrentUser() async {
     final userModel = await remoteDataSource.getCurrentUser();
     return userModel; 
   }

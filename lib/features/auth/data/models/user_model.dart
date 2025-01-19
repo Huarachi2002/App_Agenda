@@ -1,7 +1,10 @@
 import '../../domain/entities/user.dart';
 
-class UserModel extends User {
+class UserModel extends UserEntity {
+  final String password;
+
   const UserModel({
+    required this.password,
     required super.id,
     required super.name,
     required super.email,
@@ -14,8 +17,10 @@ class UserModel extends User {
       name: map['name'] as String,
       email: map['email'] as String,
       role: _stringToUserRole(map['role'] as String),
+      password: map['password'] as String? ?? '',
     );
   }
+
 
   Map<String, dynamic> toMap() {
     return {
@@ -23,6 +28,7 @@ class UserModel extends User {
       'name': name,
       'email': email,
       'role': role.toString().split('.').last,
+      'password': password,
     };
   }
 
