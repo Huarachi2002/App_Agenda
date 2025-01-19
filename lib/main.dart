@@ -2,7 +2,6 @@ import 'package:app_task/core/router/app_router.dart';
 import 'package:app_task/features/user/data/datasources/user_remote_datasource.dart';
 import 'package:app_task/features/user/data/repositories_impl/user_repository_impl.dart';
 import 'package:app_task/features/user/presentation/controllers/user_controller.dart';
-import 'package:app_task/features/user/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,4 +1,5 @@
 import 'package:app_task/features/attendance/presentation/pages/attendance_page.dart';
+import 'package:app_task/features/teacher/presentation/pages/teacher_home_content.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -34,6 +35,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/attendance',
         name: 'attendance',
         builder: (_, __) => const AttendancePage(),
+      ),
+      GoRoute(
+        path: '/teacher',
+        name: 'teacher_home',
+        builder: (context, state) => const TeacherHomeContent(),
       ),
     ],
     // Redirecciones basadas en estado
