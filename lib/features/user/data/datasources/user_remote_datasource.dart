@@ -31,7 +31,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   /// Lista de usuarios de prueba en memoria
   static final List<UserModel> _testUsers = [
     UserModel(
-      id: '001',
+      id: 'child1',
       name: 'Juan Estudiante',
       email: 'student@demo.com',
       role: UserRole.student,

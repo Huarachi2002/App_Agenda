@@ -32,15 +32,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HomePage(),
       ),
       GoRoute(
-        path: '/attendance',
-        name: 'attendance',
-        builder: (_, __) => const AttendancePage(),
-      ),
-      GoRoute(
         path: '/teacher',
         name: 'teacher_home',
         builder: (context, state) => const TeacherHomeContent(),
       ),
+      GoRoute(
+        path: '/attendance',
+        name: 'attendance',
+        builder: (context, state) => const AttendancePage(),
+      )
     ],
     // Redirecciones basadas en estado
     redirect: (context, state) {

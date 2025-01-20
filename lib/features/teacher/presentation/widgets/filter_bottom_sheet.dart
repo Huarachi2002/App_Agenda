@@ -78,13 +78,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
 
             const SizedBox(height: 16),
-             // Botón de "Limpiar Filtro"
-            TextButton(
-              onPressed: () {
-                widget.onApply(_course = null, _subject = null, _studentId = null);
-              },
-              child: const Text('Limpiar Filtro'),
-            ),
+             
             ElevatedButton(
               onPressed: () {
                 // Al aplicar, retornamos al caller
