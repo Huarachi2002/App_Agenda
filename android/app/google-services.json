@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "916605788301",
+    "project_id": "app-agenda-24964",
+    "storage_bucket": "app-agenda-24964.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916605788301:android:1965a2a37ae85187c782c4",
+        "android_client_info": {
+          "package_name": "com.huarachi.app_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbTtPFczlzCG-hzI_7as-KQDQRaYiNtFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

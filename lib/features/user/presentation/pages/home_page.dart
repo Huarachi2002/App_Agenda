@@ -41,7 +41,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
+      appBar: AppBar(title: const Text('Agenda')),
       drawer: const AppDrawer(),
       body: SafeArea(
         child: Padding(

@@ -1,4 +1,4 @@
-package com.example.app_task
+package com.huarachi.app_task
 
 import io.flutter.embedding.android.FlutterActivity
 
