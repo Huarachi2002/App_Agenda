@@ -1,3 +1,4 @@
+import 'package:app_task/features/admin/presentation/pages/admin_agenda_page.dart';
 import 'package:app_task/features/auth/domain/entities/user.dart';
 import 'package:app_task/features/teacher/presentation/pages/teacher_home_content.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         return const TeacherHomeContent();
 
       case UserRole.admin:
-        return const Center(child: Text('Vista de Administrador (por definir)'));
+        return const AdminAgendaPage();
     }
   }
 }

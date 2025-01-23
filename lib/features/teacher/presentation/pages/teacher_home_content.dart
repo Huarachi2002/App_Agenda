@@ -1,5 +1,6 @@
 import 'package:app_task/features/teacher/domain/entities/teacher_agenda_item.dart';
 import 'package:app_task/features/teacher/presentation/controllers/teacher_agenda_controller.dart';
+import 'package:app_task/features/teacher/presentation/pages/create_communication_page.dart';
 import 'package:app_task/features/teacher/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,6 +56,15 @@ class _TeacherHomeContentState extends ConsumerState<TeacherHomeContent> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CreateCommunicationPage()),
+                );
+              },
+              child: const Text('Nuevo Comunicado'),
+            ),
             TextButton.icon(
               icon: const Icon(Icons.filter_list),
               label: const Text('Filtrar'),

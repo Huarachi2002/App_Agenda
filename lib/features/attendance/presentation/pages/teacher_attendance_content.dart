@@ -37,6 +37,15 @@ class _TeacherAttendanceContentState extends ConsumerState<TeacherAttendanceCont
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const Center()),
+                );
+              },
+              child: const Text('Crear Registro de Asistencia'),
+            ),
             TextButton.icon(
               icon: const Icon(Icons.filter_list),
               label: const Text('Filtrar'),

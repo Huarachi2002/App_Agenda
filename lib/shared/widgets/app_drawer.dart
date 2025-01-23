@@ -1,3 +1,4 @@
+import 'package:app_task/features/auth/domain/entities/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/user/presentation/controllers/user_controller.dart';
@@ -30,14 +31,15 @@ class AppDrawer extends ConsumerWidget {
               },
             ),
             // Opción 2: Ir a Asistencia
-            ListTile(
-              leading: const Icon(Icons.checklist),
-              title: const Text('Asistencia'),
-              onTap: () {
-                // Supongamos que la ruta es /attendance
-                context.go('/attendance');
-              },
-            ),
+            if(user?.role != UserRole.admin)
+              ListTile(
+                leading: const Icon(Icons.checklist),
+                title: const Text('Asistencia'),
+                onTap: () {
+                  // Supongamos que la ruta es /attendance
+                  context.go('/attendance');
+                },
+              ),
             const Divider(),
             // Cerrar Sesión
             ListTile(

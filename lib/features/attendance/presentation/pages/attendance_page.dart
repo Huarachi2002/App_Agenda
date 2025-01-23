@@ -10,7 +10,7 @@ import '../../../user/presentation/controllers/user_controller.dart';
 import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart' as student;
 
 class AttendancePage extends ConsumerStatefulWidget {
-  const AttendancePage({Key? key}) : super(key: key);
+  const AttendancePage({super.key});
 
   @override
   ConsumerState<AttendancePage> createState() => _AttendancePageState();
