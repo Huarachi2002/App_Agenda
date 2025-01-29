@@ -1,5 +1,7 @@
 import 'package:app_task/features/agenda/data/datasource/comunication_remote_datasource.dart';
 import 'package:app_task/features/agenda/data/repository_impl/comunication_repository_impl.dart';
+import 'package:app_task/features/recording/data/repositories_impl/teacher_record_repository_impl.dart';
+import 'package:app_task/features/recording/presentation/controllers/teacher_record_notifier.dart';
 import 'package:app_task/features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,10 @@ void main() async {
           CommunicationRepositoryImpl(
             CommunicationRemoteDataSourceImpl(http.Client()),
           ),
+        ),
+
+        teacherRecordRepositoryProvider.overrideWithValue(
+          TeacherRecordRepositoryImpl(http.Client()),
         ),
 
         // Sobrescribimos userRepositoryProvider con nuestra implementación.

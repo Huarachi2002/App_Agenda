@@ -1,6 +1,6 @@
-import 'package:app_task/features/admin/presentation/pages/admin_agenda_page.dart';
+import 'package:app_task/features/agenda/presentation/pages/admin_agenda_page.dart';
 import 'package:app_task/features/auth/domain/entities/user.dart';
-import 'package:app_task/features/teacher/presentation/pages/teacher_home_content.dart';
+import 'package:app_task/features/agenda/presentation/pages/teacher_agenda_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../agenda/presentation/pages/agenda_page.dart';
@@ -101,7 +101,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         }
 
       case UserRole.teacher:
-        return const TeacherHomeContent();
+        return const TeacherAgendaContent();
 
       case UserRole.admin:
         return const AdminAgendaPage();

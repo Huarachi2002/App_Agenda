@@ -40,6 +40,17 @@ class AppDrawer extends ConsumerWidget {
                   context.go('/attendance');
                 },
               ),
+            // Opción 3: Ir a Grabar Clase
+            if(user?.role == UserRole.teacher)
+              ListTile(
+                leading: const Icon(Icons.mic),
+                title: const Text('Grabar Clase'),
+                onTap: () {
+                  // Supongamos que la ruta es /recording
+                  context.go('/recording');
+                },
+              ),
+
             const Divider(),
             // Cerrar Sesión
             ListTile(

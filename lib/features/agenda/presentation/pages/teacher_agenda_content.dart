@@ -1,6 +1,6 @@
 import 'package:app_task/features/teacher/domain/entities/teacher_agenda_item.dart';
 import 'package:app_task/features/teacher/presentation/controllers/teacher_agenda_controller.dart';
-import 'package:app_task/features/teacher/presentation/pages/create_communication_page.dart';
+import 'package:app_task/features/teacher/presentation/pages/teacher_create_communication_page.dart';
 import 'package:app_task/features/teacher/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,14 +9,14 @@ import 'package:app_task/features/auth/domain/entities/user.dart';
 
 // (opcional) Importar un provider que maneje la lista de notificaciones/tareas
 
-class TeacherHomeContent extends ConsumerStatefulWidget {
-  const TeacherHomeContent({Key? key}) : super(key: key);
+class TeacherAgendaContent extends ConsumerStatefulWidget {
+  const TeacherAgendaContent({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<TeacherHomeContent> createState() => _TeacherHomeContentState();
+  ConsumerState<TeacherAgendaContent> createState() => _TeacherAgendaContentState();
 }
 
-class _TeacherHomeContentState extends ConsumerState<TeacherHomeContent> {
+class _TeacherAgendaContentState extends ConsumerState<TeacherAgendaContent> {
   // Variables de estado para el filtro
   String? _selectedCourse;   // Ej: "1A", "2B", etc.
   String? _selectedSubject;  // Ej: "Matemáticas", "Lengua", etc.
@@ -45,7 +45,7 @@ class _TeacherHomeContentState extends ConsumerState<TeacherHomeContent> {
       ),
     ));
 
-    debugPrint('TeacherHomeContent -> Filtros: '
+    debugPrint('TeacherAgendaContent -> Filtros: '
     'course=$_selectedCourse, subject=$_selectedSubject, studentId=$_selectedStudentId');
 
 
