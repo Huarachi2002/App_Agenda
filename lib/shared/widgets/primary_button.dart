@@ -21,7 +21,7 @@ class PrimaryButton extends StatelessWidget {
       ),
       child: isLoading 
         ? const CircularProgressIndicator(color: Colors.white)
-        : Text(text),
+        : Text(text, style: const TextStyle(color: Color(0xff192f6a)),),
     );
   }
 }

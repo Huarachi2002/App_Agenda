@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/teacher_agenda_item.dart';
+import '../../../agenda/domain/entities/teacher_agenda_item.dart';
 
 /// Clase para contener los criterios de filtro
 class TeacherAgendaFilter {
@@ -29,34 +29,34 @@ class TeacherAgendaFilter {
 }
 
 // Lista mock de items para simular la agenda del docente
-final List<TeacherAgendaItem> _mockTeacherItems = [
-  TeacherAgendaItem(
+final List<AgendaItem> _mockTeacherItems = [
+  AgendaItem(
     id: '1',
     title: 'Comunicado general para 1A',
     course: '1A',
     entireCourse: true,
   ),
-  TeacherAgendaItem(
+  AgendaItem(
     id: '2',
     title: 'Tarea de Matemáticas #2',
     course: '1A',
     subject: 'Matemáticas',
     entireCourse: false,
   ),
-  TeacherAgendaItem(
+  AgendaItem(
     id: '3',
     title: 'Notificación para estudiante st001 en 2B - Lengua',
     course: '2B',
     subject: 'Lengua',
     studentId: 'st001',
   ),
-  TeacherAgendaItem(
+  AgendaItem(
     id: '4',
     title: 'Aviso general para 2B',
     course: '2B',
     entireCourse: true,
   ),
-  TeacherAgendaItem(
+  AgendaItem(
     id: '5',
     title: 'Tarea de Historia #1 para 1B',
     course: '1B',
@@ -66,7 +66,7 @@ final List<TeacherAgendaItem> _mockTeacherItems = [
 
 // Este provider es un FutureProvider.family que filtra la lista mock.
 final teacherAgendaProvider =
-  FutureProvider.family<List<TeacherAgendaItem>, TeacherAgendaFilter>(
+  FutureProvider.family<List<AgendaItem>, TeacherAgendaFilter>(
     (ref, filter) async {
       // Para debug, imprime algo al entrar
       // (Te asegura que el provider se está ejecutando)

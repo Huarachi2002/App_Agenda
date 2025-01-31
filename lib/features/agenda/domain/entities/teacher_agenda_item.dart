@@ -1,4 +1,4 @@
-class TeacherAgendaItem {
+class AgendaItem {
   final String id;
   final String title;
 
@@ -14,7 +14,7 @@ class TeacherAgendaItem {
   /// Indica si va para todo el curso (entero).
   final bool entireCourse;
 
-  const TeacherAgendaItem({
+  const AgendaItem({
     required this.id,
     required this.title,
     this.course,

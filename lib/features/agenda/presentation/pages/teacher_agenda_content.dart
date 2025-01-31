@@ -1,7 +1,8 @@
-import 'package:app_task/features/teacher/domain/entities/teacher_agenda_item.dart';
+import 'package:app_task/features/agenda/domain/entities/teacher_agenda_item.dart';
 import 'package:app_task/features/teacher/presentation/controllers/teacher_agenda_controller.dart';
 import 'package:app_task/features/teacher/presentation/pages/teacher_create_communication_page.dart';
 import 'package:app_task/features/teacher/presentation/widgets/filter_bottom_sheet.dart';
+import 'package:app_task/shared/widgets/background_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../user/presentation/controllers/user_controller.dart';
@@ -30,9 +31,7 @@ class _TeacherAgendaContentState extends ConsumerState<TeacherAgendaContent> {
 
     // Validamos que el user sea un docente
     if (user == null || user.role != UserRole.teacher) {
-      return const Scaffold(
-        body: Center(child: Text('No tienes permisos de docente')),
-      );
+      return const Center(child: Text('No tienes permisos de docente'));
     }
 
     // Observamos la información de la agenda
@@ -49,14 +48,59 @@ class _TeacherAgendaContentState extends ConsumerState<TeacherAgendaContent> {
     'course=$_selectedCourse, subject=$_selectedSubject, studentId=$_selectedStudentId');
 
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Ejemplo de un Row con un botón de filtrar
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
+    return Stack(
+        children: [
+          // Fondo gradiente
+          const BackgroundGradient(),
+          
+          // Contenido principal
+          SafeArea(
+            child: Column(
+              children: [
+                // Encabezado con botones
+                _buildHeader(context),
+
+                // Expanded para la lista
+                Expanded(
+                  child: agendaState.when(
+                    data: (items) {
+                      if (items.isEmpty) {
+                        return const Center(child: Text('No hay notificaciones/tareas.'));
+                      }
+                      return ListView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        itemCount: items.length,
+                        itemBuilder: (context, index) {
+                          final item = items[index];
+                          return _AgendaItemCard(item: item);
+                        },
+                      );
+                    },
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (error, stack) => Center(child: Text('Error: $error')),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+
+
+  }
+
+  // Encabezado con "Nuevo Comunicado" y "Filtrar"
+  Widget _buildHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white.withOpacity(0.9),
+                foregroundColor: Colors.black87,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -65,97 +109,73 @@ class _TeacherAgendaContentState extends ConsumerState<TeacherAgendaContent> {
               },
               child: const Text('Nuevo Comunicado'),
             ),
-            TextButton.icon(
-              icon: const Icon(Icons.filter_list),
-              label: const Text('Filtrar'),
-              onPressed: _openFilterDialog,
-            ),
-          ],
-        ),
-
-        // Mostramos la lista
-        Expanded(
-          child: agendaState.when(
-            data: (items) {
-              debugPrint('TeacherHomeContent -> data with items: ${items.length}');
-              if (items.isEmpty) {
-                return const Center(child: Text('No hay notificaciones/tareas.'));
-              }
-              return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return ListTile(
-                    title: Text(item.title),
-                    subtitle: Text(_buildSubtitle(item)),
-                  );
-                  
-                },
-              );
-            },
-            loading: () {
-              debugPrint('TeacherHomeContent -> loading...');
-              return const Center(child: CircularProgressIndicator());
-            },
-            error: (error, stack) {
-              debugPrint('TeacherHomeContent -> error: $error');
-              return Center(child: Text('Error: $error'));
-            },
           ),
-        ),
-      ],
+          const SizedBox(width: 12),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white.withOpacity(0.9),
+              foregroundColor: Colors.black87,
+            ),
+            onPressed: _openFilterDialog,
+            icon: const Icon(Icons.filter_list),
+            label: const Text('Filtrar'),
+          ),
+        ],
+      ),
     );
-
   }
 
+  
+  
+
   void _openFilterDialog() async {
-  final result = await showDialog<_FilterResult>(
+    final result = await showDialog<_FilterResult>(
     context: context,
     builder: (ctx) => AlertDialog(
       title: const Text('Filtrar'),
       content: _FilterDialogContent(
-        initialCourse: _selectedCourse,
-        initialSubject: _selectedSubject,
-        initialStudentId: _selectedStudentId,
-      ),
-    ),
-  );
-
-  if (result != null) {
-    setState(() {
-      _selectedCourse = result.course;
-      _selectedSubject = result.subject;
-      _selectedStudentId = result.studentId;
-
-      debugPrint('Filtro aplicado: course=$_selectedCourse, subject=$_selectedSubject, studentId=$_selectedStudentId');
-    });
-  }
-}
-
-
-  // Abre un modal/bottomSheet para filtrar
-  void _openFilterModal() {
-    showModalBottomSheet(
-      context: context,
-      builder: (ctx) {
-        return FilterBottomSheet(
           initialCourse: _selectedCourse,
           initialSubject: _selectedSubject,
           initialStudentId: _selectedStudentId,
-          onApply: (course, subject, studentId) {
-            setState(() {
-              _selectedCourse = course;
-              _selectedSubject = subject;
-              _selectedStudentId = studentId;
-            });
-            Navigator.pop(ctx);
-          },
-        );
-      },
+        ),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedCourse = result.course;
+        _selectedSubject = result.subject;
+        _selectedStudentId = result.studentId;
+
+        debugPrint('Filtro aplicado: course=$_selectedCourse, subject=$_selectedSubject, studentId=$_selectedStudentId');
+      });
+    }
+  }
+
+}
+
+// Card para mostrar cada ítem de la agenda
+class _AgendaItemCard extends StatelessWidget {
+  final AgendaItem item;
+  const _AgendaItemCard({Key? key, required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.only(bottom: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        title: Text(
+          item.title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(_buildSubtitle(item)),
+      ),
     );
   }
 
-  String _buildSubtitle(TeacherAgendaItem item) {
+  String _buildSubtitle(AgendaItem item) {
     final buffer = StringBuffer();
     if (item.course != null) {
       buffer.write('Curso: ${item.course}');
@@ -163,22 +183,17 @@ class _TeacherAgendaContentState extends ConsumerState<TeacherAgendaContent> {
         buffer.write(' (todo el curso)');
       }
     }
-
     if (item.subject != null) {
-      if (buffer.isNotEmpty) buffer.write(' - ');
+      if (buffer.isNotEmpty) buffer.write(' • ');
       buffer.write('Materia: ${item.subject}');
     }
-
     if (item.studentId != null) {
-      if (buffer.isNotEmpty) buffer.write(' - ');
+      if (buffer.isNotEmpty) buffer.write(' • ');
       buffer.write('Estudiante: ${item.studentId}');
     }
-
     return buffer.isEmpty ? 'Sin destinatario específico' : buffer.toString();
   }
-
 }
-
 
 // Modelo interno para guardar resultado del diálogo
 class _FilterResult {
@@ -267,7 +282,7 @@ class _FilterDialogContentState extends State<_FilterDialogContent> {
             ));
 
             },
-            child: const Text('Limpiar Filtro'),
+            child: const Text('Limpiar Filtro', style: TextStyle(color: Color(0xff192f6a),)),
           ),
           TextButton(
             onPressed: () {
@@ -277,7 +292,7 @@ class _FilterDialogContentState extends State<_FilterDialogContent> {
                 studentId: studentId,
               ));
             },
-            child: const Text('Aplicar'),
+            child: const Text('Aplicar', style: TextStyle(color: Color(0xff192f6a),)),
           ),
         ],
       )

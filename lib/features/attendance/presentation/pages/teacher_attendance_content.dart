@@ -1,9 +1,12 @@
+import 'package:app_task/features/attendance/presentation/pages/select_course_page.dart';
+import 'package:app_task/features/user/presentation/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/teacher_attendance_controller.dart';
 
 class TeacherAttendanceContent extends ConsumerStatefulWidget {
-  const TeacherAttendanceContent({Key? key}) : super(key: key);
+  final String teacherId; // <-- Recibimos la ID aquí
+   const TeacherAttendanceContent({Key? key, required this.teacherId}) : super(key: key);
 
   @override
   ConsumerState<TeacherAttendanceContent> createState() => _TeacherAttendanceContentState();
@@ -15,6 +18,7 @@ class _TeacherAttendanceContentState extends ConsumerState<TeacherAttendanceCont
   String? _selectedStudentId;
   DateTime? _startDate;
   DateTime? _endDate;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +34,7 @@ class _TeacherAttendanceContentState extends ConsumerState<TeacherAttendanceCont
       ),
     );
 
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -41,7 +46,7 @@ class _TeacherAttendanceContentState extends ConsumerState<TeacherAttendanceCont
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const Center()),
+                  MaterialPageRoute(builder: (_) => SelectCoursePage(teacherId: widget.teacherId)), //TODO: Crear Lista de Asistencia
                 );
               },
               child: const Text('Crear Registro de Asistencia'),

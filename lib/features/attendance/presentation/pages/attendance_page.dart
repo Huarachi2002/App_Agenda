@@ -105,12 +105,10 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
       }
     }
 
-    
-
     // Si es otro rol (teacher/admin), de momento no mostramos nada
     return _buildScaffold(
       context,
-      body: const TeacherAttendanceContent(),
+      body: TeacherAttendanceContent(teacherId: userState.value!.id),
     );
   }
 

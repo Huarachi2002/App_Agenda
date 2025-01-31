@@ -45,10 +45,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppBar(title: const Text('Agenda')),
       drawer: const AppDrawer(),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: _buildContentForUser(user),
-        ),
+        child: _buildContentForUser(user),
       ),
     );
   }

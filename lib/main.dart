@@ -1,5 +1,10 @@
 import 'package:app_task/features/agenda/data/datasource/comunication_remote_datasource.dart';
 import 'package:app_task/features/agenda/data/repository_impl/comunication_repository_impl.dart';
+import 'package:app_task/features/attendance/data/datasource/attendance_remote_datasource.dart';
+import 'package:app_task/features/attendance/data/repository_impl/attendance_repository_impl.dart';
+import 'package:app_task/features/attendance/presentation/controllers/notifier/create_list_attendance_notifier.dart';
+import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart';
+import 'package:app_task/features/attendance/presentation/controllers/teacher_attendance_controller.dart';
 import 'package:app_task/features/recording/data/repositories_impl/teacher_record_repository_impl.dart';
 import 'package:app_task/features/recording/presentation/controllers/teacher_record_notifier.dart';
 import 'package:app_task/features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
@@ -24,14 +29,24 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
+
+        // Crear Comunicado (Teacher)
         communicationRepositoryProvider.overrideWithValue(
           CommunicationRepositoryImpl(
             CommunicationRemoteDataSourceImpl(http.Client()),
           ),
         ),
 
+        // Grabar Clase (Teacher)
         teacherRecordRepositoryProvider.overrideWithValue(
           TeacherRecordRepositoryImpl(http.Client()),
+        ),
+
+        // Crear Lista Asiistencia (Teacher)
+        attendanceRepositoryProvider.overrideWithValue(
+          AttendanceRepositoryImpl(
+            AttendanceRemoteDataSourceImpl(http.Client()),
+          ),
         ),
 
         // Sobrescribimos userRepositoryProvider con nuestra implementación.
@@ -55,6 +70,14 @@ class MainApp extends ConsumerWidget  {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+        ),
       ),
       routeInformationParser: goRouter.routeInformationParser,
       routerDelegate: goRouter.routerDelegate,
