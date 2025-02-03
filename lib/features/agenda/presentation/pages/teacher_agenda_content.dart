@@ -1,10 +1,9 @@
 import 'package:app_task/features/agenda/domain/entities/teacher_agenda_item.dart';
-import 'package:app_task/features/teacher/presentation/controllers/teacher_agenda_controller.dart';
-import 'package:app_task/features/teacher/presentation/pages/teacher_create_communication_page.dart';
-import 'package:app_task/features/teacher/presentation/widgets/filter_bottom_sheet.dart';
 import 'package:app_task/shared/widgets/background_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../teacher/presentation/controllers/teacher_agenda_controller.dart';
+import '../../../teacher/presentation/pages/teacher_create_communication_page.dart';
 import '../../../user/presentation/controllers/user_controller.dart';
 import 'package:app_task/features/auth/domain/entities/user.dart';
 
@@ -30,7 +29,7 @@ class _TeacherAgendaContentState extends ConsumerState<TeacherAgendaContent> {
     final user = userState.value;
 
     // Validamos que el user sea un docente
-    if (user == null || user.role != UserRole.teacher) {
+    if (user == null || user.role != UserRole.docente) {
       return const Center(child: Text('No tienes permisos de docente'));
     }
 

@@ -52,7 +52,7 @@ class AppDrawer extends ConsumerWidget {
                 },
               ),
             // Opción 3: Ir a Grabar Clase
-            if(user?.role == UserRole.teacher)
+            if(user?.role == UserRole.docente)
               ListTile(
                 leading: const Icon(Icons.mic),
                 title: const Text('Grabar Clase'),

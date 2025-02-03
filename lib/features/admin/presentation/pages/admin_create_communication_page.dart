@@ -1,6 +1,7 @@
-import 'package:app_task/features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../teacher/presentation/controllers/notifier/create_communication_notifier.dart';
 
 class AdminCreateCommunicationPage extends ConsumerStatefulWidget {
   const AdminCreateCommunicationPage({Key? key}) : super(key: key);

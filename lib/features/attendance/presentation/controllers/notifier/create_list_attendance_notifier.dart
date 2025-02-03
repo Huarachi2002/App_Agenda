@@ -40,12 +40,36 @@ class TeacherAttendanceNotifier extends StateNotifier<TeacherAttendanceState> {
 
   TeacherAttendanceNotifier(this.repository) : super(TeacherAttendanceState());
 
+  // **Datos de prueba**
+  final List<CourseEntity> _mockCourses = [
+    CourseEntity(courseId: "course_1", courseName: "Matemáticas"),
+    CourseEntity(courseId: "course_2", courseName: "Historia"),
+    CourseEntity(courseId: "course_3", courseName: "Ciencias"),
+  ];
+
+  final Map<String, List<StudentAttendanceEntity>> _mockStudents = {
+    "course_1": [
+      StudentAttendanceEntity(studentId: "s1", fullName: "Juan Pérez", isPresent: false),
+      StudentAttendanceEntity(studentId: "s2", fullName: "María López", isPresent: false),
+      StudentAttendanceEntity(studentId: "s3", fullName: "Carlos Rodríguez", isPresent: false),
+    ],
+    "course_2": [
+      StudentAttendanceEntity(studentId: "s4", fullName: "Ana Torres", isPresent: false),
+      StudentAttendanceEntity(studentId: "s5", fullName: "Luis Ramírez", isPresent: false),
+    ],
+    "course_3": [
+      StudentAttendanceEntity(studentId: "s6", fullName: "Sofía Gómez", isPresent: false),
+      StudentAttendanceEntity(studentId: "s7", fullName: "Diego Fernández", isPresent: false),
+      StudentAttendanceEntity(studentId: "s8", fullName: "Elena Castro", isPresent: false),
+    ],
+  };
+
   // Obtener cursos del profesor
   Future<void> loadCourses(String teacherId) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final courses = await repository.getTeacherCourses(teacherId);
-      state = state.copyWith(courses: courses, isLoading: false);
+      // final courses = await repository.getTeacherCourses(teacherId); //Todo: Obtener cursos del id profesor
+      state = state.copyWith(courses: _mockCourses, isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
@@ -54,9 +78,11 @@ class TeacherAttendanceNotifier extends StateNotifier<TeacherAttendanceState> {
   // Seleccionar curso y cargar estudiantes
   Future<void> selectCourseAndLoad(String courseId) async {
     state = state.copyWith(isLoading: true, error: null);
-    final course = state.courses.firstWhere((c) => c.courseId == courseId);
+    // final course = state.courses.firstWhere((c) => c.courseId == courseId); //Todo: Obtener el curso seleccionado
+    final course = _mockCourses.firstWhere((element) => element.courseId == courseId);
     try {
-      final students = await repository.getStudentsByCourse(courseId);
+      // final students = await repository.getStudentsByCourse(courseId); //Todo: Obtener los estudiantes del curso seleccionado
+      final students = _mockStudents[courseId];
       state = state.copyWith(
         selectedCourse: course,
         students: students,
@@ -88,8 +114,11 @@ class TeacherAttendanceNotifier extends StateNotifier<TeacherAttendanceState> {
     if (state.selectedCourse == null) return;
     state = state.copyWith(isLoading: true, error: null);
     try {
-      await repository.saveAttendance(state.selectedCourse!.courseId, state.students);
+      // await repository.saveAttendance(state.selectedCourse!.courseId, state.students); Todo: Guardar Asistencia
+
       state = state.copyWith(isLoading: false);
+      print("✅ Asistencia guardada para el curso: ${state.selectedCourse!.courseName}");
+
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }

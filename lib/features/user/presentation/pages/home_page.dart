@@ -54,11 +54,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildContentForUser(UserEntity user) {
     switch (user.role) {
-      case UserRole.student:
+      case UserRole.alumno:
         // Mostramos directamente la Agenda del estudiante
         return AgendaPage(selectedUserId: user.id);
 
-      case UserRole.parent:
+      case UserRole.tutor:
         // Mostramos selección de hijo (si hay varios)
         // o directamente la agenda si solo hay uno
         final hijosCount = _mockChildren.length;
@@ -135,7 +135,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           
         }
 
-      case UserRole.teacher:
+      case UserRole.docente:
         return const TeacherAgendaContent();
 
       case UserRole.admin:

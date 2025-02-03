@@ -3,7 +3,6 @@
 import 'package:app_task/features/admin/presentation/controller/admin_agenda_controller.dart';
 import 'package:app_task/features/agenda/domain/entities/comunication_entity.dart';
 import 'package:app_task/features/agenda/domain/entities/teacher_agenda_item.dart';
-import 'package:app_task/features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

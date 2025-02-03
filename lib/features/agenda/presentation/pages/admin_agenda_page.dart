@@ -2,10 +2,11 @@ import 'package:app_task/features/admin/presentation/controller/admin_agenda_con
 import 'package:app_task/features/admin/presentation/controller/admin_agenda_provider.dart';
 import 'package:app_task/features/agenda/domain/entities/comunication_entity.dart';
 import 'package:app_task/features/agenda/domain/entities/teacher_agenda_item.dart';
-import 'package:app_task/features/teacher/presentation/pages/teacher_create_communication_page.dart';
 import 'package:app_task/shared/widgets/background_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../teacher/presentation/pages/teacher_create_communication_page.dart';
 
 class AdminAgendaPage extends ConsumerStatefulWidget {
   const AdminAgendaPage({Key? key}) : super(key: key);

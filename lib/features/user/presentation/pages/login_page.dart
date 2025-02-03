@@ -121,9 +121,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   if (value == null || value.isEmpty) {
                                     return 'Ingrese su contraseña';
                                   }
-                                  if (value.length < 6) {
-                                    return 'La contraseña debe tener al menos 6 caracteres';
-                                  }
                                   return null;
                                 },
                               ),

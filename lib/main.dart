@@ -5,16 +5,17 @@ import 'package:app_task/features/attendance/data/repository_impl/attendance_rep
 import 'package:app_task/features/attendance/presentation/controllers/notifier/create_list_attendance_notifier.dart';
 import 'package:app_task/features/recording/data/repositories_impl/teacher_record_repository_impl.dart';
 import 'package:app_task/features/recording/presentation/controllers/teacher_record_notifier.dart';
-import 'package:app_task/features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_task/core/router/app_router.dart';
 import 'package:app_task/features/user/data/datasources/user_remote_datasource.dart';
-import 'package:app_task/features/user/data/repositories_impl/user_repository_impl.dart';
 import 'package:app_task/features/user/presentation/controllers/user_controller.dart';
 import 'package:app_task/services/fcm_service.dart';
 import 'package:http/http.dart' as http;
+
+import 'features/auth/data/repositories/user_repository_impl.dart';
+import 'features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
 
 
 void main() async {
@@ -49,7 +50,7 @@ void main() async {
 
         // Sobrescribimos userRepositoryProvider con nuestra implementación.
         userRepositoryProvider.overrideWithValue(
-          UserRepositoryImpl(UserRemoteDataSourceImpl()),
+          UserRepositoryImpl(),
         ),
       ],
       child: const MainApp(),

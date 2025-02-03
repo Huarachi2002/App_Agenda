@@ -1,6 +1,8 @@
-import 'package:app_task/features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
+import 'package:app_task/shared/widgets/background_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../controllers/notifier/create_communication_notifier.dart';
 
 class CreateCommunicationPage extends ConsumerStatefulWidget {
   const CreateCommunicationPage({Key? key}) : super(key: key);
@@ -36,100 +38,153 @@ class _CreateCommunicationPageState extends ConsumerState<CreateCommunicationPag
 
     return Scaffold(
       appBar: AppBar(title: const Text('Crear Comunicado')),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: _titleCtrl,
-                decoration: const InputDecoration(labelText: 'Título'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _contentCtrl,
-                maxLines: 4,
-                decoration: const InputDecoration(labelText: 'Contenido'),
-              ),
-              const SizedBox(height: 16),
+      body: Stack(
+        children:
+        [
+          const BackgroundGradient(),
+          SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _buildTextField('Título', _titleCtrl),
+                  const SizedBox(height: 16),
+                  _buildTextField('Contenido', _contentCtrl, maxLines: 4),
+                  const SizedBox(height: 16),
 
-              // Botones o checkboxes para seleccionar cursos
-              _buildMultiSelect(
-                title: 'Cursos',
-                items: _availableCourses,
-                selectedItems: _selectedCourses,
-                onChanged: (value) {
-                  setState(() {
-                    if (_selectedCourses.contains(value)) {
-                      _selectedCourses.remove(value);
-                    } else {
-                      _selectedCourses.add(value);
-                    }
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
+                  // Botones o checkboxes para seleccionar cursos
+                  _buildMultiSelect(
+                    title: 'Cursos',
+                    items: _availableCourses,
+                    selectedItems: _selectedCourses,
+                    onChanged: _toggleSelection,
+                  ),
+                  const SizedBox(height: 16),
 
-              // Seleccionar materias
-              _buildMultiSelect(
-                title: 'Materias',
-                items: _availableSubjects,
-                selectedItems: _selectedSubjects,
-                onChanged: (value) {
-                  setState(() {
-                    if (_selectedSubjects.contains(value)) {
-                      _selectedSubjects.remove(value);
-                    } else {
-                      _selectedSubjects.add(value);
-                    }
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
+                  _buildMultiSelect(
+                    title: 'Materias',
+                    items: _availableSubjects,
+                    selectedItems: _selectedSubjects,
+                    onChanged: _toggleSelection,
+                  ),
+                  const SizedBox(height: 16),
 
-              // Seleccionar estudiantes
-              _buildMultiSelect(
-                title: 'Estudiantes',
-                items: _availableStudents,
-                selectedItems: _selectedStudents,
-                onChanged: (value) {
-                  setState(() {
-                    if (_selectedStudents.contains(value)) {
-                      _selectedStudents.remove(value);
-                    } else {
-                      _selectedStudents.add(value);
-                    }
-                  });
-                },
-              ),
-              const SizedBox(height: 24),
+                  _buildMultiSelect(
+                    title: 'Estudiantes',
+                    items: _availableStudents,
+                    selectedItems: _selectedStudents,
+                    onChanged: _toggleSelection,
+                  ),
+                  const SizedBox(height: 24),
 
-              ElevatedButton(
-                onPressed: createState.isLoading ? null : _onCreate,
-                child: createState.isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('Crear Comunicado'),
-              ),
+                  _buildCreateButton(createState, context),
 
-              createState.when(
-                data: (comm) {
-                  if (comm == null) return const SizedBox();
-                  return Text('Comunicado creado con ID: ${comm.id}');
-                },
-                loading: () => const SizedBox(),
-                error: (err, st) => Text('Error: $err'),
-              )
-            ],
+                ],
+              ),
+            ),
           ),
+        ),
+        ]
+    ),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller, {int maxLines = 1}) {
+    return TextField(
+      controller: controller,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.9),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.white.withOpacity(0.3)),
         ),
       ),
     );
   }
 
+  Widget _buildMultiSelect({
+    required String title,
+    required List<String> items,
+    required List<String> selectedItems,
+    required ValueChanged<String> onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+        ),
+        const SizedBox(height: 6),
+        Wrap(
+          spacing: 8.0,
+          children: items.map((item) {
+            final isSelected = selectedItems.contains(item);
+            return ChoiceChip(
+              label: Text(
+                item,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: isSelected ? Colors.white : const Color(0xff4c669f),
+                ),
+              ),
+              selected: isSelected,
+              selectedColor: const Color(0xff4c669f),
+              backgroundColor: Colors.white.withOpacity(0.8),
+              onSelected: (_) => onChanged(item),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  void _toggleSelection(String value) {
+    setState(() {
+      if (_selectedCourses.contains(value)) {
+        _selectedCourses.remove(value);
+      } else if (_availableCourses.contains(value)) {
+        _selectedCourses.add(value);
+      } else if (_selectedSubjects.contains(value)) {
+        _selectedSubjects.remove(value);
+      } else if (_availableSubjects.contains(value)) {
+        _selectedSubjects.add(value);
+      } else if (_selectedStudents.contains(value)) {
+        _selectedStudents.remove(value);
+      } else if (_availableStudents.contains(value)) {
+        _selectedStudents.add(value);
+      }
+    });
+  }
+
+
+  Widget _buildCreateButton(AsyncValue createState, BuildContext context) {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xff4c669f),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      onPressed: createState.isLoading ? null : () => _onCreate(context),
+      icon: createState.isLoading
+          ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white))
+          : const Icon(Icons.send, color: Colors.white),
+      label: const Text('Crear Comunicado', style: TextStyle(color: Colors.white)),
+    );
+  }
+
+
   // Botón de confirmar la creación
-  Future<void> _onCreate() async {
-    // Combina los destinatarios: cursos + materias + estudiantes
-    // Podrías preferir guardarlos en campos separados en el backend
+  Future<void> _onCreate(BuildContext context) async {
     final recipients = <String>[
       ..._selectedCourses.map((c) => 'course_$c'),
       ..._selectedSubjects.map((s) => 'subject_$s'),
@@ -141,31 +196,16 @@ class _CreateCommunicationPageState extends ConsumerState<CreateCommunicationPag
       content: _contentCtrl.text.trim(),
       recipients: recipients,
     );
-  }
 
-  // Widget helper para multi-selección (demo)
-  Widget _buildMultiSelect({
-    required String title,
-    required List<String> items,
-    required List<String> selectedItems,
-    required ValueChanged<String> onChanged,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        Wrap(
-          spacing: 8.0,
-          children: items.map((item) {
-            final isSelected = selectedItems.contains(item);
-            return ChoiceChip(
-              label: Text(item),
-              selected: isSelected,
-              onSelected: (_) => onChanged(item),
-            );
-          }).toList(),
-        ),
-      ],
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('✅ Comunicado creado correctamente'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.green,
+      ),
     );
   }
+
+
+
 }

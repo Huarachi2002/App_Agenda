@@ -1,10 +1,8 @@
 import '../../domain/entities/user.dart';
 
 class UserModel extends UserEntity {
-  final String password;
 
   const UserModel({
-    required this.password,
     required super.id,
     required super.name,
     required super.email,
@@ -17,7 +15,6 @@ class UserModel extends UserEntity {
       name: map['name'] as String,
       email: map['email'] as String,
       role: _stringToUserRole(map['role'] as String),
-      password: map['password'] as String? ?? '',
     );
   }
 
@@ -28,18 +25,17 @@ class UserModel extends UserEntity {
       'name': name,
       'email': email,
       'role': role.toString().split('.').last,
-      'password': password,
     };
   }
 
   static UserRole _stringToUserRole(String roleString) {
     switch (roleString) {
-      case 'student':
-        return UserRole.student;
-      case 'teacher':
-        return UserRole.teacher;
-      case 'parent':
-        return UserRole.parent;
+      case 'alumno':
+        return UserRole.alumno;
+      case 'docente':
+        return UserRole.docente;
+      case 'tutor':
+        return UserRole.tutor;
       case 'admin':
         return UserRole.admin;
       default:

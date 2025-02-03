@@ -1,10 +1,13 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../features/auth/data/services/odoo_auth_service.dart';
+
 class FCMService {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
+  final OdooAuthService _authService = OdooAuthService();
 
   /// Suscribe a uno o más temas
   Future<void> subscribeToTopics(List<String> topics) async {
@@ -22,6 +25,10 @@ class FCMService {
     }
   }
 
+  Future getFCMToken() async {
+    return await _firebaseMessaging.getToken();
+  }
+
   /// Inicializa FCM y notificaciones locales
   Future<void> initialize() async {
     // Solicita permisos para notificaciones
@@ -33,12 +40,14 @@ class FCMService {
         InitializationSettings(android: androidSettings);
     await _localNotifications.initialize(initializationSettings);
 
+    // Obtener el token del dispositivo
+    final token = await _firebaseMessaging.getToken();
+
     // Configura los manejadores para notificaciones
     FirebaseMessaging.onMessage.listen(_handleForegroundNotification);
     FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationClick);
 
-    // Obtener el token del dispositivo
-    final token = await _firebaseMessaging.getToken();
+
     print('Token del dispositivo: $token');
   }
 

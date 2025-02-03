@@ -2,7 +2,7 @@ class UserEntity {
   final String id;
   final String name;
   final String email;
-  final UserRole role; // Enum con {student, teacher, parent, admin}
+  final UserRole role; // Enum con {alumno, docente, tutor, admin}
 
   const UserEntity({
     required this.id,
@@ -13,4 +13,4 @@ class UserEntity {
 }
 
 // Podrías tener un enum para los roles
-enum UserRole { student, teacher, parent, admin }
+enum UserRole { alumno, docente, tutor, admin }

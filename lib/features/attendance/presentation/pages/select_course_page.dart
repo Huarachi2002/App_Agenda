@@ -33,25 +33,125 @@ class _SelectCoursePageState extends ConsumerState<SelectCoursePage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Seleccionar Curso')),
-      body: ListView.builder(
-        itemCount: state.courses.length,
-        itemBuilder: (context, index) {
-          final course = state.courses[index];
-          return ListTile(
-            title: Text(course.courseName),
-            onTap: () {
-              ref
-                  .read(teacherAttendanceProvider.notifier)
-                  .selectCourseAndLoad(course.courseId);
-              // Navegamos a la pantalla de lista de estudiantes
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AttendanceListPage()),
-              );
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: _buildBody(state),
+      ),
+
+    );
+  }
+
+  /// Construcción del contenido según el estado de carga, error o datos.
+  Widget _buildBody(TeacherAttendanceState state) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.error != null) {
+      return _buildError(state.error!);
+    }
+
+    if (state.courses.isEmpty) {
+      return _buildNoCourses();
+    }
+
+    return _buildCourseList(state);
+  }
+
+  /// UI para mostrar error con opción de reintentar.
+  Widget _buildError(String error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Error: $error',
+            style: const TextStyle(color: Colors.red, fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton.icon(
+            onPressed: () {
+              ref.read(teacherAttendanceProvider.notifier).loadCourses(widget.teacherId);
             },
-          );
+            icon: const Icon(Icons.refresh),
+            label: const Text("Reintentar"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xff4c669f),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// UI para mostrar cuando no hay cursos disponibles.
+  Widget _buildNoCourses() {
+    return const Center(
+      child: Text(
+        'No hay cursos disponibles',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  /// Lista de cursos con mejor diseño.
+  Widget _buildCourseList(TeacherAttendanceState state) {
+    return ListView.separated(
+      itemCount: state.courses.length,
+      separatorBuilder: (_, __) => const Divider(thickness: 1),
+      itemBuilder: (context, index) {
+        final course = state.courses[index];
+
+        return Card(
+          elevation: 3,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => _onCourseSelected(course.courseId),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: const Color(0xff192f6a),
+                    child: Text(
+                      course.courseName[0], // Primera letra del curso
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      course.courseName,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 18),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// Manejar selección del curso y navegar a la lista de asistencia.
+  void _onCourseSelected(String courseId) {
+    ref.read(teacherAttendanceProvider.notifier).selectCourseAndLoad(courseId);
+
+    // Transición más fluida con PageRouteBuilder
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const AttendanceListPage(),
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
   }
+
 }

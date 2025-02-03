@@ -11,6 +11,7 @@ class AgendaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     // Aquí consultarías las tareas/comunicados a partir de selectedUserId
     // Por ahora, mostraremos un layout simulado
     return Stack(

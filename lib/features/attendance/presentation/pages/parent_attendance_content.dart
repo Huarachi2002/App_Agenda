@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart' as student;
+import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart' as alumno;
 
 import '../../../../core/utils/formats.dart';
 import '../controllers/student_attendance_controller.dart';
@@ -42,7 +42,7 @@ class _ParentAttendanceContentState extends ConsumerState<ParentAttendanceConten
   /// Crea la lista de asistencias para un userId concreto
   Widget _buildAttendanceList(String userId) {
     final attendanceState = ref.watch(
-      student.attendanceProvider(
+      alumno.attendanceProvider(
         StudentAttendanceFilter(
           userId: userId,
           subject: _selectedSubject,

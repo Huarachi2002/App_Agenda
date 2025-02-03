@@ -3,17 +3,21 @@ import 'package:app_task/features/auth/data/repositories/user_repository.dart';
 import 'package:app_task/features/auth/domain/entities/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../services/fcm_service.dart';
+import '../../../auth/data/repositories/user_repository_impl.dart';
+
 /// Este provider global inyectará la dependencia UserRepository.
 /// Lo ideal es crearlo en un archivo de "injection" separado, 
 /// pero aquí lo hacemos todo junto para ejemplo.
 final userRepositoryProvider = Provider<UserRepository>((ref) {
-  throw UnimplementedError('Debe proveer una implementación de UserRepository');
+  return UserRepositoryImpl(); // Ahora usa la implementación con Odoo
 });
 
 /// Controller con estado AsyncValue<UserEntity?> 
 /// para representar el usuario actual (o null si no hay).
 class UserController extends AsyncNotifier<UserEntity?> {
   late final UserRepository _repository;
+
 
   @override
   FutureOr<UserEntity?> build() async {
@@ -32,6 +36,7 @@ class UserController extends AsyncNotifier<UserEntity?> {
     try {
       final user = await _repository.signIn(email: email, password: password);
       // Actualizamos el estado con el usuario
+
       state = AsyncValue.data(user);
     } catch (e, st) {
       // Si ocurre error, lo guardamos en el estado
@@ -68,6 +73,34 @@ class UserController extends AsyncNotifier<UserEntity?> {
       state = AsyncValue.error(e, st);
     }
   }
+
+  Future<void> fetchCursos() async {
+    if (state.value == null) return; // No hay usuario autenticado
+
+    state = const AsyncValue.loading();
+    try {
+      final cursos = await _repository.getCursos(state.value!.id, state.value!.role.toString());
+      print("Cursos obtenidos: $cursos"); // Aquí puedes mostrarlos en la UI
+      state = AsyncValue.data(state.value);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> fetchAgenda() async {
+    if (state.value == null) return; // No hay usuario autenticado
+
+    state = const AsyncValue.loading();
+    try {
+      final agenda = await _repository.getAgenda(state.value!.id);
+      print("Agenda obtenida: $agenda"); // Aquí puedes mostrarla en la UI
+      state = AsyncValue.data(state.value);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+
 }
 
 /// Provider que expone la instancia de UserController

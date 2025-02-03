@@ -33,7 +33,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const HomePage(),
       ),
       GoRoute(
-        path: '/teacher',
+        path: '/docente',
         name: 'teacher_home',
         builder: (context, state) => const TeacherAgendaContent(),
       ),

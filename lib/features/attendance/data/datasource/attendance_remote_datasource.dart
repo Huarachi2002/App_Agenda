@@ -16,7 +16,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   @override
   Future<List<CourseModel>> getTeacherCourses(String teacherId) async {
     // Ejemplo de llamada GET
-    final url = Uri.parse('https://backend.com/api/teacher/$teacherId/courses');
+    final url = Uri.parse('https://backend.com/api/docente/$teacherId/courses');
     final response = await client.get(url);
     if (response.statusCode == 200) {
       final List data = jsonDecode(response.body);
@@ -41,7 +41,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   @override
   Future<void> saveAttendance(String courseId, List<StudentAttendanceModel> attendanceList) async {
     final url = Uri.parse('https://backend.com/api/courses/$courseId/attendance');
-    final body = attendanceList.map((student) => student.toMap()).toList();
+    final body = attendanceList.map((alumno) => alumno.toMap()).toList();
     final response = await client.post(
       url,
       headers: {'Content-Type': 'application/json'},

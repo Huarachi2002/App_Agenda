@@ -20,4 +20,11 @@ abstract class UserRepository {
 
   /// Obtiene al usuario actualmente autenticado (si existe sesión).
   Future<UserEntity?> getCurrentUser();
+
+  Future<List<Map<String, dynamic>>> getAgenda(String userId);
+
+  Future<List<Map<String, dynamic>>> getCursos(String userId, String userType);
+
+
+
 }

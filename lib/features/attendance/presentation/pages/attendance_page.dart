@@ -10,7 +10,7 @@ import '../../../../core/utils/formats.dart';
 import '../../../../shared/widgets/background_gradient.dart';
 import '../../../auth/domain/entities/user.dart';
 import '../../../user/presentation/controllers/user_controller.dart';
-import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart' as student;
+import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart' as alumno;
 
 class AttendancePage extends ConsumerStatefulWidget {
   const AttendancePage({super.key});
@@ -68,7 +68,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
 
 
     // Si es estudiante, mostramos directo su asistencia
-    if (user.role == UserRole.student) {
+    if (user.role == UserRole.alumno) {
       return _buildScaffold(
         context,
         body: _buildAttendanceList(user.id),
@@ -76,7 +76,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
     }
 
     // Si es padre
-    if (user.role == UserRole.parent) {
+    if (user.role == UserRole.tutor) {
       // Verificamos cuantos hijos hay
       final hijoCount = _mockChildren.length;
       if (hijoCount == 1) {
@@ -127,7 +127,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
       }
     }
 
-    // Si es otro rol (teacher/admin), de momento no mostramos nada
+    // Si es otro rol (docente/admin), de momento no mostramos nada
     return _buildScaffold(
       context,
       body: TeacherAttendanceContent(teacherId: userState.value!.id),
@@ -135,9 +135,9 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
   }
 
   Widget _buildContentForUser(UserEntity user) {
-    if (user.role == UserRole.student) {
+    if (user.role == UserRole.alumno) {
       return _buildAttendanceList(user.id);
-    } else if (user.role == UserRole.parent) {
+    } else if (user.role == UserRole.tutor) {
       final hijoCount = _mockChildren.length;
       if (hijoCount == 1) {
         return _buildAttendanceList(_mockChildren.first['id']!);
@@ -204,7 +204,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
 
         );
       }
-    }else if (user.role == UserRole.teacher){
+    }else if (user.role == UserRole.docente){
       return  TeacherAttendanceContent(teacherId: user.id);
     }else {
       return Container();
@@ -249,7 +249,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
   /// Crea la lista de asistencias para un userId concreto
   Widget _buildAttendanceList(String userId) {
     final attendanceState = ref.watch(
-      student.attendanceProvider(
+      alumno.attendanceProvider(
         StudentAttendanceFilter(
           userId: userId,
           subject: _selectedSubject,
@@ -272,6 +272,10 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(0.9),
+                    foregroundColor: Colors.black87,
+                  ),
                   icon: const Icon(Icons.filter_list),
                   label: const Text('Filtrar'),
                   onPressed: _openFilterDialog,
