@@ -1,6 +1,8 @@
 import 'package:app_task/features/agenda/presentation/pages/admin_agenda_page.dart';
+import 'package:app_task/features/agenda/presentation/pages/parent_agenda_content.dart';
 import 'package:app_task/features/auth/domain/entities/user.dart';
 import 'package:app_task/features/agenda/presentation/pages/teacher_agenda_content.dart';
+import 'package:app_task/shared/widgets/background_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../agenda/presentation/pages/agenda_page.dart';
@@ -66,35 +68,71 @@ class _HomePageState extends ConsumerState<HomePage> {
         } else {
           // Si tiene varios, mostramos un dropdown
           // y cuando seleccione uno, mostramos la agenda
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          return Stack(
             children: [
-              const Text('Seleccione un hijo para ver su agenda:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              DropdownButton<String>(
-                hint: const Text('Seleccionar hijo'),
-                value: _selectedChildId,
-                items: _mockChildren.map((child) {
-                  return DropdownMenuItem<String>(
-                    value: child['id'],
-                    child: Text(child['name'] ?? ''),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedChildId = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              // Si ya seleccionó uno
-              if (_selectedChildId != null) 
-                Expanded(
-                  child: AgendaPage(selectedUserId: _selectedChildId),
-                ),
+              const BackgroundGradient(),
+
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                      'Seleccione un hijo para ver su agenda:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        dropdownColor: Colors.white,
+                        hint: const Text(
+                          'Seleccionar hijo',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        value: _selectedChildId,
+                        items: _mockChildren.map((child) {
+                          return DropdownMenuItem<String>(
+                            value: child['id'],
+                            child: Text(
+                              child['name'] ?? '',
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedChildId = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    if (_selectedChildId != null)
+                      Expanded(
+                        child: ParentAgendaContent(selectedUserId: _selectedChildId)
+                      ),
+                    ],
+                  ),
+                )
+              )
             ],
           );
+          
+          
         }
 
       case UserRole.teacher:

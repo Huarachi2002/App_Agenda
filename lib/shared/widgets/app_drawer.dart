@@ -18,6 +18,17 @@ class AppDrawer extends ConsumerWidget {
           children: [
             // Encabezado con info del usuario
             UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xff4c669f),
+                    Color(0xff3b5998),
+                    Color(0xff192f6a),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
               accountName: Text(user?.name ?? 'Sin nombre'),
               accountEmail: Text(user?.email ?? 'Sin email'),
             ),

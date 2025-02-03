@@ -3,8 +3,6 @@ import 'package:app_task/features/agenda/data/repository_impl/comunication_repos
 import 'package:app_task/features/attendance/data/datasource/attendance_remote_datasource.dart';
 import 'package:app_task/features/attendance/data/repository_impl/attendance_repository_impl.dart';
 import 'package:app_task/features/attendance/presentation/controllers/notifier/create_list_attendance_notifier.dart';
-import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart';
-import 'package:app_task/features/attendance/presentation/controllers/teacher_attendance_controller.dart';
 import 'package:app_task/features/recording/data/repositories_impl/teacher_record_repository_impl.dart';
 import 'package:app_task/features/recording/presentation/controllers/teacher_record_notifier.dart';
 import 'package:app_task/features/teacher/presentation/controllers/notifier/create_communication_notifier.dart';
