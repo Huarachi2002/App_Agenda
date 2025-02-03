@@ -70,40 +70,6 @@ class ParentAgendaContent extends StatelessWidget {
         ],
       ),
     );
-
-    
-    
-    // Column(
-    //   crossAxisAlignment: CrossAxisAlignment.stretch,
-    //   children: [
-    //     const Text(
-    //       'Pendientes',
-    //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-    //     ),
-    //     // TODO: Lista de pendientes
-    //     Expanded(
-    //       child: ListView(
-    //         children: const [
-    //           ListTile(title: Text('Tarea de matemáticas')),
-    //           ListTile(title: Text('Comunicado: Reunión de padres')),
-    //         ],
-    //       ),
-    //     ),
-    //     const Divider(),
-    //     const Text(
-    //       'Leídas / Finalizadas',
-    //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-    //     ),
-    //     Expanded(
-    //       child: ListView(
-    //         children: const [
-    //           ListTile(title: Text('Citaciones pasadas')),
-    //           ListTile(title: Text('Tarea ya entregada')),
-    //         ],
-    //       ),
-    //     ),
-    //   ],
-    // );
   
   }
 

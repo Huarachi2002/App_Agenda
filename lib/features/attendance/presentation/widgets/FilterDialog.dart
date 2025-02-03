@@ -1,6 +1,8 @@
 import 'package:app_task/features/attendance/presentation/models/filter_result.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/utils/formats.dart';
+
 class FilterDialog extends StatefulWidget {
   final String? initialSubject;
   final DateTime? initialStartDate;
@@ -54,7 +56,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 Expanded(
                   child: Text(startDate == null
                       ? 'Fecha inicio: ---'
-                      : 'Fecha inicio: ${_formatDate(startDate!)}'),
+                      : 'Fecha inicio: ${formatDate(startDate!)}'),
                 ),
                 IconButton(
                   icon: const Icon(Icons.calendar_today),
@@ -77,7 +79,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 Expanded(
                   child: Text(endDate == null
                       ? 'Fecha fin: ---'
-                      : 'Fecha fin: ${_formatDate(endDate!)}'),
+                      : 'Fecha fin: ${formatDate(endDate!)}'),
                 ),
                 IconButton(
                   icon: const Icon(Icons.calendar_today),
@@ -122,9 +124,5 @@ class _FilterDialogState extends State<FilterDialog> {
     );
   }
 
-  String _formatDate(DateTime dt) {
-    return '${dt.year}-${_twoDigits(dt.month)}-${_twoDigits(dt.day)}';
-  }
-
-  String _twoDigits(int n) => n < 10 ? '0$n' : '$n';
+  
 }

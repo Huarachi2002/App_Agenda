@@ -1,10 +1,13 @@
 import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart';
 import 'package:app_task/features/attendance/presentation/models/filter_result.dart';
+import 'package:app_task/features/attendance/presentation/pages/parent_attendance_content.dart';
 import 'package:app_task/features/attendance/presentation/pages/teacher_attendance_content.dart';
 import 'package:app_task/features/attendance/presentation/widgets/FilterDialog.dart';
 import 'package:app_task/shared/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/formats.dart';
+import '../../../../shared/widgets/background_gradient.dart';
 import '../../../auth/domain/entities/user.dart';
 import '../../../user/presentation/controllers/user_controller.dart';
 import 'package:app_task/features/attendance/presentation/controllers/student_attendance_controller.dart' as student;
@@ -44,6 +47,25 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
         body: Center(child: Text('Error o sin sesión')),
       );
     }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Asistencia'),
+      ),
+      drawer: const AppDrawer(),
+      body: Stack(
+        children: [
+          const BackgroundGradient(), // Fondo degradado
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _buildContentForUser(user),
+            ),
+          ),
+        ],
+      ),
+    );
+
 
     // Si es estudiante, mostramos directo su asistencia
     if (user.role == UserRole.student) {
@@ -94,7 +116,7 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
 
               const SizedBox(height: 16),
               // Si ya seleccionó uno
-              
+
               if (_selectedChildId != null)
                 Expanded(
                   child: _buildAttendanceList(_selectedChildId!),
@@ -111,6 +133,84 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
       body: TeacherAttendanceContent(teacherId: userState.value!.id),
     );
   }
+
+  Widget _buildContentForUser(UserEntity user) {
+    if (user.role == UserRole.student) {
+      return _buildAttendanceList(user.id);
+    } else if (user.role == UserRole.parent) {
+      final hijoCount = _mockChildren.length;
+      if (hijoCount == 1) {
+        return _buildAttendanceList(_mockChildren.first['id']!);
+      } else {
+        return Stack(
+          children: [
+            const BackgroundGradient(),
+            SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'Seleccione un hijo para ver su agenda:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
+                          dropdownColor: Colors.white,
+                          hint: const Text(
+                            'Seleccionar hijo',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          value: _selectedChildId,
+                          items: _mockChildren.map((child) {
+                            return DropdownMenuItem<String>(
+                              value: child['id'],
+                              child: Text(
+                                child['name'] ?? '',
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedChildId = value;
+                            });
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      if (_selectedChildId != null)
+                         Expanded(child: ParentAttendanceContent(selectedUserId: _selectedChildId,mockChildren: _mockChildren,)),
+                    ],
+                  ),
+                )
+            )
+          ]
+
+        );
+      }
+    }else if (user.role == UserRole.teacher){
+      return  TeacherAttendanceContent(teacherId: user.id);
+    }else {
+      return Container();
+    }
+  }
+
 
   void _openFilterDialog() async {
     final result = await showDialog<FilterResult>(
@@ -185,14 +285,27 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
                 itemCount: records.length,
                 itemBuilder: (context, index) {
                   final record = records[index];
-                  return ListTile(
-                    title: Text(
-                      '${_formatDateTime(record.date)} - ${record.subject}',
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    subtitle: Text(record.attended
-                        ? 'Asistió'
-                        : 'Falta'),
+                    elevation: 4,
+                    color: Colors.white.withOpacity(0.9),
+                    child: ListTile(
+                      title: Text(
+                        '${formatDateTime(record.date)} - ${record.subject}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        record.attended ? 'Asistió' : 'Falta',
+                        style: TextStyle(
+                          color: record.attended ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   );
+
                 },
               ),
             ),
@@ -204,13 +317,5 @@ class _AttendancePageState extends ConsumerState<AttendancePage> {
     );
   }
 
-  String _formatDateTime(DateTime dt) {
-    // Ejemplo simplificado: "2023-09-05 07:30"
-    final dateString = '${dt.year}-${_twoDigits(dt.month)}-${_twoDigits(dt.day)}';
-    final timeString = '${_twoDigits(dt.hour)}:${_twoDigits(dt.minute)}';
-    return '$dateString $timeString';
-  }
-
-  String _twoDigits(int n) => n < 10 ? '0$n' : '$n';
 }
 

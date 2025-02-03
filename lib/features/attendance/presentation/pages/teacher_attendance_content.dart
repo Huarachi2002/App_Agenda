@@ -1,7 +1,9 @@
 import 'package:app_task/features/attendance/presentation/pages/select_course_page.dart';
 import 'package:app_task/features/user/presentation/controllers/user_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/formats.dart';
 import '../controllers/teacher_attendance_controller.dart';
 
 class TeacherAttendanceContent extends ConsumerStatefulWidget {
@@ -42,16 +44,23 @@ class _TeacherAttendanceContentState extends ConsumerState<TeacherAttendanceCont
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => SelectCoursePage(teacherId: widget.teacherId)), //TODO: Crear Lista de Asistencia
-                );
-              },
-              child: const Text('Crear Registro de Asistencia'),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => SelectCoursePage(teacherId: widget.teacherId)), //TODO: Crear Lista de Asistencia
+                  );
+                },
+                child: const Text('Crear Registro de Asistencia',style: TextStyle(color: Color(0xff192f6a)),),
+              ),
             ),
+            const SizedBox(width: 12),
             TextButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white.withOpacity(0.9),
+                foregroundColor: Colors.black87,
+              ),
               icon: const Icon(Icons.filter_list),
               label: const Text('Filtrar'),
               onPressed: _openFilterDialog,
@@ -67,12 +76,26 @@ class _TeacherAttendanceContentState extends ConsumerState<TeacherAttendanceCont
               return ListView.builder(
                 itemCount: records.length,
                 itemBuilder: (context, index) {
-                  final rec = records[index];
-                  return ListTile(
-                    title: Text('${_formatDate(rec.date)} - Curso: ${rec.course}, ${rec.subject}'),
-                    subtitle: Text(rec.attended
-                        ? 'Asistió - Estudiante: ${rec.userId}'
-                        : 'Falta - Estudiante: ${rec.userId}'),
+                  final record = records[index];
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                    color: Colors.white.withOpacity(0.9),
+                    child: ListTile(
+                      title: Text(
+                        '${formatDateTime(record.date)} - ${record.subject}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        record.attended ? 'Asistió' : 'Falta',
+                        style: TextStyle(
+                          color: record.attended ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   );
                 },
               );
@@ -84,14 +107,7 @@ class _TeacherAttendanceContentState extends ConsumerState<TeacherAttendanceCont
       ],
     );
   }
-
-  String _formatDate(DateTime date) {
-    return '${date.year}-${_twoDigits(date.month)}-${_twoDigits(date.day)} '
-           '${_twoDigits(date.hour)}:${_twoDigits(date.minute)}';
-  }
-
-  String _twoDigits(int n) => n < 10 ? '0$n' : '$n';
-
+  
   void _openFilterDialog() async {
     final result = await showDialog<_TeacherAttendanceFilterResult>(
       context: context,
@@ -215,7 +231,7 @@ class _TeacherFilterDialogState extends State<_TeacherFilterDialog> {
                 Expanded(
                   child: Text(startDate == null
                       ? 'Fecha inicio: ---'
-                      : 'Fecha inicio: ${_formatDate(startDate!)}'),
+                      : 'Fecha inicio: ${formatDate(startDate!)}'),
                 ),
                 IconButton(
                   icon: const Icon(Icons.calendar_today),
@@ -239,7 +255,7 @@ class _TeacherFilterDialogState extends State<_TeacherFilterDialog> {
                 Expanded(
                   child: Text(endDate == null
                       ? 'Fecha fin: ---'
-                      : 'Fecha fin: ${_formatDate(endDate!)}'),
+                      : 'Fecha fin: ${formatDate(endDate!)}'),
                 ),
                 IconButton(
                   icon: const Icon(Icons.calendar_today),
@@ -293,7 +309,7 @@ class _TeacherFilterDialogState extends State<_TeacherFilterDialog> {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String formatDate(DateTime date) {
     return '${date.year}-${_twoDigits(date.month)}-${_twoDigits(date.day)}';
   }
 
